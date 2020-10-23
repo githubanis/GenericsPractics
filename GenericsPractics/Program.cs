@@ -7,20 +7,17 @@ namespace GenericsPractics
     {
         static void Main(string[] args)
         {
-            var list = new LinkedList<int>();
+            var employeeByDepertment = new SortedDictionary<string, List<Employee>>();
 
-            list.AddFirst(2);
-            list.AddFirst(3);
-
-            var fast = list.First;
-            list.AddAfter(fast, 33);
-            list.AddBefore(list.AddAfter(fast, 100), 200);
-
-            var node = list.First;
-            while (node != null)
+            employeeByDepertment.Add("Sales",
+                    new List<Employee> { new Employee(), new Employee(), new Employee()}
+                );
+            employeeByDepertment.Add("Engineering",
+                    new List<Employee> { new Employee(), new Employee() }
+                );
+            foreach (var item in employeeByDepertment)
             {
-                Console.WriteLine(node.Value);
-                node = node.Next;
+                Console.WriteLine($"The number of employee in the {item.Key} Depertment is: {item.Value.Count}");
             }
         }
     }
