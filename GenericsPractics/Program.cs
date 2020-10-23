@@ -7,9 +7,21 @@ namespace GenericsPractics
     {
         static void Main(string[] args)
         {
-            var number = new List<int>();
+            var list = new LinkedList<int>();
 
-            number.Add(334);
+            list.AddFirst(2);
+            list.AddFirst(3);
+
+            var fast = list.First;
+            list.AddAfter(fast, 33);
+            list.AddBefore(list.AddAfter(fast, 100), 200);
+
+            var node = list.First;
+            while (node != null)
+            {
+                Console.WriteLine(node.Value);
+                node = node.Next;
+            }
         }
     }
 }

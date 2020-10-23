@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Generics.Test
 {
     [TestClass]
-    public class UnitTest1
+    public class ListTest
     {
         [TestMethod]
         public void A_List_can_insert()
