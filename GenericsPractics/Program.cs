@@ -1,24 +1,70 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GenericsPractics
 {
+    public class EmployeeCompare : IEqualityComparer<Employee> , IComparer<Employee>
+    {
+        int IComparer<Employee>.Compare([AllowNull] Employee x, [AllowNull] Employee y)
+        {
+            return String.Compare(x.Name, y.Name);
+        }
+
+        bool IEqualityComparer<Employee>.Equals([AllowNull] Employee x, [AllowNull] Employee y)
+        {
+            return String.Equals(x.Name, y.Name);
+        }
+
+        int IEqualityComparer<Employee>.GetHashCode([DisallowNull] Employee obj)
+        {
+            return obj.Name.GetHashCode();
+        }
+    }
+
+    internal class DepartmentCollection : SortedDictionary<string, SortedSet<Employee>>
+    {
+        public DepartmentCollection Add(string departmentName, Employee employee)
+        {
+            if (!ContainsKey(departmentName))
+            {
+                Add(departmentName, new SortedSet<Employee>(new EmployeeCompare()));
+            }
+            this[departmentName].Add(employee);
+            return this;
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            var employeeByDepertment = new SortedDictionary<string, List<Employee>>();
 
-            employeeByDepertment.Add("Sales",
-                    new List<Employee> { new Employee(), new Employee(), new Employee()}
-                );
-            employeeByDepertment.Add("Engineering",
-                    new List<Employee> { new Employee(), new Employee() }
-                );
-            foreach (var item in employeeByDepertment)
+            var department = new DepartmentCollection(); 
+
+            department.Add("Sales", new Employee { Name = "Joy" })
+                      .Add("Sales", new Employee { Name = "Jony" })
+                      .Add("Sales", new Employee { Name = "Anis" })
+                      .Add("Sales", new Employee { Name = "Anis" })
+                      .Add("Sales", new Employee { Name = "Joy" });
+
+            department.Add("Engineering", new Employee { Name = "Dani" })
+                      .Add("Engineering", new Employee { Name = "Dani" })
+                      .Add("Engineering", new Employee { Name = "Anis" })
+                      .Add("Engineering", new Employee { Name = "Anis" })
+                      .Add("Engineering", new Employee { Name = "Anis" });
+
+            foreach (var depertment in department)
             {
-                Console.WriteLine($"The number of employee in the {item.Key} Depertment is: {item.Value.Count}");
+                Console.WriteLine(depertment.Key);
+                foreach (var employee in depertment.Value)
+                {
+                    Console.WriteLine("\t" + employee.Name);
+                    //Console.WriteLine("\t" + employee.Age);
+                }
             }
         }
+
     }
 }
